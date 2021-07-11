@@ -20,14 +20,12 @@ import org.elasticsearch.client.Requests
 import java.time.Duration
 
 
-object FlinkCoinbaseMain {
+object FlinkBitcoinMain {
 
   @throws[Exception]
   def main(args: Array[String]): Unit = {
 
     val env = StreamExecutionEnvironment.getExecutionEnvironment
-
-//    env.getConfig.setAutoWatermarkInterval(Duration.ofSeconds(5).toMillis)
 
     val properties = FlinkKafkaProperties.getProperties
 
@@ -36,7 +34,7 @@ object FlinkCoinbaseMain {
 
     val kafkaStream = env.addSource(kafkaConsumer)
 
-    val mapperstring = kafkaStream.map(new TickerJsonToTickerModelMapper).map(new TickerToOHLCMapper)
+    val kafka2ohlc = kafkaStream.map(new TickerJsonToTickerModelMapper).map(new TickerToOHLCMapper)
 
     val strategy = WatermarkStrategy
       .forBoundedOutOfOrderness(Duration.ofSeconds(20))
@@ -44,12 +42,12 @@ object FlinkCoinbaseMain {
         override def extractTimestamp(element: OHLCModel, recordTimestamp: Long): Long = element.timestamp
       })
 
-    val timedTicker = mapperstring.assignTimestampsAndWatermarks(strategy)
+    val timedTicker = kafka2ohlc.assignTimestampsAndWatermarks(strategy)
       .windowAll(TumblingEventTimeWindows.of(Time.minutes(1)))
       .reduce(new OHLCReduceFunction())
 
 //    kafkaStream.print()
-//    mapperstring.print()
+//    kafka2ohlc.print()
 //    timedTicker.print()
 
     val tickerToJson = timedTicker.map(new OHLCModelToJson)

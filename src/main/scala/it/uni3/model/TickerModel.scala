@@ -1,6 +1,5 @@
 package it.uni3.model
 
-import java.sql.Timestamp
 import java.time.Instant
 
 case class TickerModel(
