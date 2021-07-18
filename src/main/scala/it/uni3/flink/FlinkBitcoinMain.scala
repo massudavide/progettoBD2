@@ -46,10 +46,6 @@ object FlinkBitcoinMain {
       .windowAll(TumblingEventTimeWindows.of(Time.minutes(1)))
       .reduce(new OHLCReduceFunction())
 
-//    kafkaStream.print()
-//    kafka2ohlc.print()
-//    timedTicker.print()
-
     val tickerToJson = timedTicker.map(new OHLCModelToJson)
 
     val httpHosts = new java.util.ArrayList[HttpHost]
@@ -63,7 +59,7 @@ object FlinkBitcoinMain {
           val json = gson.fromJson(element, (new java.util.HashMap[String, Any]()).getClass)
           println(json)
           val rqst: IndexRequest = Requests.indexRequest
-            .index("bitcoin-ohcl")
+            .index("bitcoin-ohlc")
             .source(json)
 
           indexer.add(rqst)
