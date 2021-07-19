@@ -44,8 +44,8 @@ object mongo2elastic {
       .master("local")
       .appName("MongoSparkConnectorIntro")
       .master("local")
-      .config("spark.mongodb.input.uri", "mongodb://127.0.0.1/coinbasepro.ticker")
-      .config("spark.mongodb.output.uri", "mongodb://127.0.0.1/coinbasepro.ticker")
+      .config("spark.mongodb.input.uri", "mongodb://127.0.0.1/coinbase.ticker")
+      .config("spark.mongodb.output.uri", "mongodb://127.0.0.1/coinbase.ticker")
       .config("spark.es.nodes","127.0.0.1")
       .config("spark.es.port","9200")
       .config("spark.es.nodes.wan.only","true") //Needed for ES on AWS
