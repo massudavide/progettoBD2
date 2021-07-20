@@ -8,7 +8,6 @@
 # avviare applicazione 
 1) eseguire docker-compose (tramite comando "docker-compose up")
 2) eseguire "start-all.sh"
-3) eseguire classe "FlinkBitcoinMain"
 
 # inviare dati da Flink ad elasticsearch
 avviare classe "FlinkBitcoinMain"
